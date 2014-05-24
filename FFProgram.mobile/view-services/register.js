@@ -2,28 +2,30 @@
 	var ViewModel,
 		app = global.app = global.app || {};
 
-	ViewModel = kendo.data.ObservableObject.extend({
+	ViewModel = app.ViewModelBase.extend({
 		email: "",
 		pass: "",
 		rePass: "",
 		onRegister: function () {
 			var that = this;
+			// TODO: Add validation.
 
-			app.data.users.registerUser(that.email, that.pass)
+			var register = app.data.users.registerUser(that.email, that.pass)
 				.done(function (d) {
 					console.log("User registered successfully!");
 					return app.data.users.authenticate(that.email, that.pass);
 				})
-				.done(function (d) {
-					// TODO: Store the tokens returned
-					// NOTE: Pass that.remember as well
-
-					app.user = d;
+				.done(function (d) {					
 					app.views.home.navigateTo();
 				})
-				.fail(function (d) {
-					console.log("Failed big time!" + d);
+				.fail(function (err) {
+					that.set('hasErrors', true);
+					that.set('errorHeader', "Error creating user: " + err.statusText);
+					that.set('errorText', err.responseText);
 				});
+
+			that.busyContent = "Creating user...";
+			this.waitForResult(register);
 		},
 		onCancel: function () {
 			app.views.login.navigateTo();

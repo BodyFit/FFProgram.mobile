@@ -18,8 +18,13 @@
             Remember me
             <input type="checkbox" data-role="switch" data-bind="checked: remember" />
         </li>
+        <li data-bind="visible: hasErrors">
+            <span data-bind="text: errorHeader" style="color:red"></span>
+            <p>
+                <span data-bind="text: errorText" style="font-size:smaller; color:red"></span>
+            </p>
+        </li>
     </ul>
-
     <div data-role="footer">
         <div data-role="navbar">
             <button data-role="button" data-align="left" data-bind="click: onRegister">Sign up</button>

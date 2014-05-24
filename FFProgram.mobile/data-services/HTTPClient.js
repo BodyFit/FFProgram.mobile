@@ -33,21 +33,36 @@
 	var HTTPClient = function (root, dataType) {
 		this.root = root;
 		this.dataType = dataType;
+		this.defaultHeaders = {};
 	}
 
 	HTTPClient.prototype = {
+		'setHeader': function (headers) {
+			var that = this;
+			$.each(headers, function (key, value) {
+				that.defaultHeaders[key] = value;
+			})
+		},
 		'buildRequest': function () {
 			return new ClientRequestContext(this);
 		},
 		'executeRequest': function (method, uri, data) {
-		    var request = {
+			var that = this;
+			var request = {
+				'beforeSend': function (r)
+				{
+					$.each(that.defaultHeaders, function (key, value) {
+						r.setRequestHeader(key, value);
+					})
+				},
 				'type': method,
 				'dataType': this.dataType,
 				'url': uri
 			};
 		    
 		    if (data) {
-		        request.data = data;
+		    	request.data = JSON.stringify(data);
+		    	request.contentType = "application/json";
 		    }
 			return $.ajax(request);
 		}

@@ -2,16 +2,30 @@
 	var ViewModel,
 		app = global.app = global.app || {};
 
-	ViewModel = kendo.data.ObservableObject.extend({
-		email: "",
-		pass: "",
+	ViewModel = app.ViewModelBase.extend({
+		email: "miro@test.com",
+		pass: "test",
 		remember: false,
+
 		onLogin: function () {
 			var that = this;
-			app.loginService.authenticate(that.email, that.pass, that.remember)
-				.then(function () {
-					app.views.home.navigateTo();
+
+			var authenticate = app.data.users.authenticate(that.email, that.pass)
+				.done(function (d) {
+					app.views.profileWizard.navigateTo();
+				})
+				.fail(function (err) {
+					that.set('hasErrors', true);
+					that.set('errorHeader', "Error logging in: " + err.statusText);
+					if (err.status === 401) {
+						that.set('errorText', "Wrong username or password!");
+					} else {
+						that.set('errorText', err.responseText);
+					}
 				});
+
+			that.busyContent = "Logging in...";
+			that.waitForResult(authenticate);
 		},
 		onRegister: function () {
 			app.views.register.navigateTo();
@@ -21,15 +35,10 @@
 	app.loginService = {
 		viewModel: new ViewModel(),
 		clear: function () {
-		    var that = app.loginService;
+			var that = app.loginService;
 			that.viewModel.email = "";
 			that.viewModel.pass = "";
 			that.remember = false;
-		},
-		authenticate: function () {
-			var result = $.deferred();
-			result.resolve();
-			return result;
 		}
 	};
 })(window);

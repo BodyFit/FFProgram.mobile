@@ -11,13 +11,26 @@
 				'Email': email
 			};
 
-			return data.defaultClient.buildRequest().addToRoute("users").post(user);
+			return data.defaultClient.buildRequest().addToRoute("api").addToRoute("users").post(user);
 		},
 		'getUser': function (id) {
-			return data.defaultClient.buildRequest().addToRoute("users").addToRoute(id).get();
+			return data.defaultClient.buildRequest().addToRoute("api").addToRoute("users").addToRoute(id).get();
 		},
 		'authenticate': function (email, password) {
-			//return data.defaultClient.buildRequest().addToRoute("users")
+			var user = {
+				'username': email,
+				'password': password
+			}
+			return data.defaultClient
+						.buildRequest()
+						.addToRoute("auth")
+						.post(user)
+						.done(function (data) {
+							var authHeader = {
+								'Authorization': "Bearer " + data.Result.access_token
+							};
+							app.data.defaultClient.setHeader(authHeader);
+						})
 		}
 	};
 })(window);

@@ -35,12 +35,10 @@
     <Content Include="cordova.android.js" />
     <Content Include="cordova.ios.js" />
     <Content Include="cordova.wp8.js" />
+    <Content Include="data-services\defaultClient.js" />
     <Content Include="data-services\HTTPClient.js" />
     <Content Include="data-services\RequestBuilder.js" />
     <Content Include="data-services\users.js" />
-    <Content Include="data\weather.json">
-      <SubType>Content</SubType>
-    </Content>
     <Content Include="index.html" />
     <Content Include="kendo\js\jquery.min.js">
       <SubType>Content</SubType>
@@ -70,6 +68,7 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="view-services\dashboard.js" />
+    <Content Include="view-services\profile.js" />
     <Content Include="view-services\register.js" />
     <Content Include="view-services\login.js">
       <SubType>Content</SubType>
@@ -121,6 +120,7 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="views\dashboard-view.html" />
+    <Content Include="views\profile-wizard.html" />
     <Content Include="views\register-view.html" />
     <Content Include="views\login-view.html" />
     <Resource Include="App_Resources\Android\drawable-hdpi\icon.png" />
@@ -164,7 +164,6 @@
     <Folder Include="App_Resources\WP8\" />
     <Folder Include="App_Resources\WP8\Tiles\" />
     <Folder Include="App_Resources\WP8\Tiles\Iconic\" />
-    <Folder Include="data\" />
     <Folder Include="kendo\" />
     <Folder Include="kendo\js\" />
     <Folder Include="kendo\styles\" />
