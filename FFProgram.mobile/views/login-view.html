@@ -1,5 +1,5 @@
 <div data-role="view" data-layout="mobile-view" data-title="Login"
-     data-model="app.loginService.viewModel">
+     data-model="app.loginService.viewModel" data-transition="overlay:up">
     <ul data-role="listview" data-style="inset">
         <li>
             <label>
@@ -15,10 +15,8 @@
         </li>
 
         <li>
-            <label>
-                Remember me
-                <input type="checkbox" data-role="switch" data-bind="checked: remember" />
-            </label>
+            Remember me
+            <input type="checkbox" data-role="switch" data-bind="checked: remember" />
         </li>
     </ul>
 
