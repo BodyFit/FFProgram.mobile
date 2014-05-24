@@ -1,5 +1,5 @@
 <div data-role="view" data-layout="mobile-view" data-title="Login"
-     data-model="app.loginService.viewModel">
+     data-model="app.loginService.viewModel" data-transition="overlay:up">
     <ul data-role="listview" data-style="inset">
         <li>
             <label>
@@ -15,13 +15,16 @@
         </li>
 
         <li>
-            <label>
-                Remember me
-                <input type="checkbox" data-role="switch" data-bind="checked: remember" />
-            </label>
+            Remember me
+            <input type="checkbox" data-role="switch" data-bind="checked: remember" />
+        </li>
+        <li data-bind="visible: hasErrors">
+            <span data-bind="text: errorHeader" style="color:red"></span>
+            <p>
+                <span data-bind="text: errorText" style="font-size:smaller; color:red"></span>
+            </p>
         </li>
     </ul>
-
     <div data-role="footer">
         <div data-role="navbar">
             <button data-role="button" data-align="left" data-bind="click: onRegister">Sign up</button>

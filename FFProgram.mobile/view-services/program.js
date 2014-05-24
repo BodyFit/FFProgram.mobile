@@ -3,10 +3,10 @@
 		app = global.app = global.app || {};
 
 	ViewModel = app.ViewModelBase.extend({
-		test: "some test..."
+		'someText': "Lorem ipsum..."
 	});
 
-	app.dashboardService = {
+	app.programService = {
 		viewModel: new ViewModel()
 	};
 })(window);

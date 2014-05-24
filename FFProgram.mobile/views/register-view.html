@@ -1,5 +1,6 @@
 <div data-role="view" data-layout="mobile-view" data-title="Register"
-     data-model="app.registerService.viewModel" data-hide="app.registerService.clear">
+     data-model="app.registerService.viewModel" data-hide="app.registerService.clear"
+     data-transition="overlay:right">
     <ul data-role="listview" data-style="inset">
         <li>
             <label>
@@ -18,6 +19,12 @@
                 Re-enter password
                 <input type="password" data-bind="value: rePass" />
             </label>
+        </li>
+        <li data-bind="visible: hasErrors">
+            <span data-bind="text: errorHeader" style="color:red"></span>
+            <p>
+                <span data-bind="text: errorText" style="font-size:smaller; color:red"></span>
+            </p>
         </li>
     </ul>
 
