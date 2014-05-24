@@ -35,6 +35,9 @@
     <Content Include="cordova.android.js" />
     <Content Include="cordova.ios.js" />
     <Content Include="cordova.wp8.js" />
+    <Content Include="data-services\HTTPClient.js" />
+    <Content Include="data-services\RequestBuilder.js" />
+    <Content Include="data-services\users.js" />
     <Content Include="data\weather.json">
       <SubType>Content</SubType>
     </Content>
@@ -63,18 +66,15 @@
     <Content Include="kendo\styles\kendo.mobile.all.min.css">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="scripts\app.js">
+    <Content Include="application\app.js">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="scripts\location.js">
+    <Content Include="view-services\dashboard.js" />
+    <Content Include="view-services\register.js" />
+    <Content Include="view-services\login.js">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="scripts\login.js">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="scripts\weather.js">
-      <SubType>Content</SubType>
-    </Content>
+    <Content Include="application\views.js" />
     <Content Include="styles\images\appbuilder.png">
       <SubType>Content</SubType>
     </Content>
@@ -120,6 +120,9 @@
     <Content Include="styles\main.css">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="views\dashboard-view.html" />
+    <Content Include="views\register-view.html" />
+    <Content Include="views\login-view.html" />
     <Resource Include="App_Resources\Android\drawable-hdpi\icon.png" />
     <Resource Include="App_Resources\Android\drawable-ldpi\icon.png" />
     <Resource Include="App_Resources\Android\drawable-mdpi\icon.png" />
@@ -166,8 +169,11 @@
     <Folder Include="kendo\js\" />
     <Folder Include="kendo\styles\" />
     <Folder Include="kendo\styles\images\" />
+    <Folder Include="data-services\" />
+    <Folder Include="view-services\" />
+    <Folder Include="views\" />
     <Folder Include="Plugins\" />
-    <Folder Include="scripts\" />
+    <Folder Include="application\" />
     <Folder Include="styles\" />
     <Folder Include="styles\images\" />
   </ItemGroup>

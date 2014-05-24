@@ -1,0 +1,31 @@
+<div data-role="view" data-layout="mobile-view" data-title="Login"
+     data-model="app.loginService.viewModel">
+    <ul data-role="listview" data-style="inset">
+        <li>
+            <label>
+                Email
+                <input type="text" data-role="none" data-bind="value: email" />
+            </label>
+        </li>
+        <li>
+            <label>
+                Password
+                <input type="password" data-bind="value: pass" />
+            </label>
+        </li>
+
+        <li>
+            <label>
+                Remember me
+                <input type="checkbox" data-role="switch" data-bind="checked: remember" />
+            </label>
+        </li>
+    </ul>
+
+    <div data-role="footer">
+        <div data-role="navbar">
+            <button data-role="button" data-align="left" data-bind="click: onRegister">Sign up</button>
+            <button data-role="button" data-align="right" data-bind="click: onLogin">Login</button>
+        </div>
+    </div>
+</div>

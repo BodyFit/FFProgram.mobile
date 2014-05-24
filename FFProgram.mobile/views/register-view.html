@@ -1,0 +1,30 @@
+<div data-role="view" data-layout="mobile-view" data-title="Register"
+     data-model="app.registerService.viewModel" data-hide="app.registerService.clear">
+    <ul data-role="listview" data-style="inset">
+        <li>
+            <label>
+                Email
+                <input type="text" data-role="none" data-bind="value: email" />
+            </label>
+        </li>
+        <li>
+            <label>
+                Password
+                <input type="password" data-bind="value: pass" />
+            </label>
+        </li>
+        <li>
+            <label>
+                Re-enter password
+                <input type="password" data-bind="value: rePass" />
+            </label>
+        </li>
+    </ul>
+
+    <div data-role="footer">
+        <div data-role="navbar">
+            <button data-role="button" data-align="left" data-bind="click: onCancel">Cancel</button>
+            <button data-role="button" data-align="right" data-bind="click: onRegister">Register</button>
+        </div>
+    </div>
+</div>
