@@ -11,10 +11,7 @@
 				'Email': email
 			};
 
-			return data.defaultClient.buildRequest().addToRoute("api").addToRoute("users").post(user);
-		},
-		'getUser': function (id) {
-			return data.defaultClient.buildRequest().addToRoute("api").addToRoute("users").addToRoute(id).get();
+			return data.defaultClient.buildRequest().addToRoute("signup").post(user);
 		},
 		'authenticate': function (email, password) {
 			var user = {

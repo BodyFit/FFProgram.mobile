@@ -10,22 +10,11 @@
 		onLogin: function () {
 			var that = this;
 
-			var authenticate = app.data.users.authenticate(that.email, that.pass)
-				.done(function (d) {
-					app.views.profileWizard.navigateTo();
-				})
-				.fail(function (err) {
-					that.set('hasErrors', true);
-					that.set('errorHeader', "Error logging in: " + err.statusText);
-					if (err.status === 401) {
-						that.set('errorText', "Wrong username or password!");
-					} else {
-						that.set('errorText', err.responseText);
-					}
+			app.loginService
+				.authenticate(that.email, that.pass, that)
+				.done(function () {
+					return app.profileService.initializeUser(that);
 				});
-
-			that.busyContent = "Logging in...";
-			that.waitForResult(authenticate);
 		},
 		onRegister: function () {
 			app.views.register.navigateTo();
@@ -39,6 +28,23 @@
 			that.viewModel.email = "";
 			that.viewModel.pass = "";
 			that.remember = false;
+		},
+		authenticate: function (email, pass, viewModel) {
+			var authenticate = app.data.users.authenticate(viewModel.email, viewModel.pass)
+				.fail(function (err) {
+					viewModel.set('hasErrors', true);
+					viewModel.set('errorHeader', "Error logging in: " + err.statusText);
+					if (err.status === 401) {
+						viewModel.set('errorText', "Wrong username or password!");
+					} else {
+						viewModel.set('errorText', err.responseText);
+					}
+				});
+
+			viewModel.busyContent = "Logging in...";
+			viewModel.waitForResult(authenticate);
+
+			return authenticate;
 		}
 	};
 })(window);

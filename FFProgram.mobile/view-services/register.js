@@ -10,22 +10,22 @@
 			var that = this;
 			// TODO: Add validation.
 
-			var register = app.data.users.registerUser(that.email, that.pass)
-				.done(function (d) {
-					console.log("User registered successfully!");
-					return app.data.users.authenticate(that.email, that.pass);
-				})
-				.done(function (d) {					
-					app.views.home.navigateTo();
-				})
-				.fail(function (err) {
-					that.set('hasErrors', true);
-					that.set('errorHeader', "Error creating user: " + err.statusText);
-					that.set('errorText', err.responseText);
-				});
+			var register = app.data.users.registerUser(that.email, that.pass);
 
 			that.busyContent = "Creating user...";
-			this.waitForResult(register);
+			that.waitForResult(register);
+
+			register.done(function () {
+				app.loginService
+					.authenticate(that.email, that.pass, that)
+					.done(function () {
+						return app.profileService.initializeUser(that);
+					});
+			}).fail(function (err) {
+				that.set('hasErrors', true);
+				that.set('errorHeader', "Error creating user: " + err.statusText);
+				that.set('errorText', err.responseText);
+			});
 		},
 		onCancel: function () {
 			app.views.login.navigateTo();

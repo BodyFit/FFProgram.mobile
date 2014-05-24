@@ -6,7 +6,7 @@
 		test: "some test..."
 	});
 
-	app.dashboardService = {
+	app.settingsService = {
 		viewModel: new ViewModel()
 	};
 })(window);

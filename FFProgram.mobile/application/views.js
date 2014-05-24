@@ -11,6 +11,9 @@
 		login: new PageDesciption("views/login-view.html"),
 		register: new PageDesciption("views/register-view.html"),
 		dashboard: new PageDesciption("views/dashboard-view.html"),
-		profileWizard: new PageDesciption("views/profile-wizard.html")
+		profileWizard: new PageDesciption("views/profile/profile-wizard.html"),
+		profileConfig: new PageDesciption("views/profile/profile-view.html"),
+		about: new PageDesciption("views/about-view.html"),
+		settings: new PageDesciption("views/settings-view.html")
 	}
 }(window));
