@@ -14,9 +14,11 @@
 		login: new PageDesciption("views/login-view.html"),
 		register: new PageDesciption("views/register-view.html"),
 		dashboard: new PageDesciption("views/dashboard-view.html"),
-		profileWizard: new PageDesciption("views/profile/profile-wizard.html"),
+        programOverview: new PageDesciption("views/program-overview-view.html"),
+		profileMain: new PageDesciption("views/profile/profile-main.html"),
+        profileBiometrics: new PageDesciption("views/profile/profile-biometrics.html"),
         profileGoals: new PageDesciption("views/profile/profile-goals.html"),
-		profileConfig: new PageDesciption("views/profile/profile-view.html"),
+		profilePreferences: new PageDesciption("views/profile/profile-preferences.html"),
 		about: new PageDesciption("views/about-view.html"),
 		settings: new PageDesciption("views/settings-view.html")
 	}

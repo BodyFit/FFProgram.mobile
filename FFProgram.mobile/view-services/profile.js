@@ -20,6 +20,20 @@
             .put(profile);
     };
     
+    var getBiometrics = function () {
+        return data.defaultClient.buildRequest()
+            .addToRoute("api")
+            .addToRoute("biometrics")
+            .get();
+    };
+
+    var updateBiometrics = function (profile) {
+        return data.defaultClient.buildRequest()
+            .addToRoute("api")
+            .addToRoute("biometrics")
+            .post(profile);
+    };
+    
     var getGoals = function () {
         return data.defaultClient.buildRequest()
             .addToRoute("api")
@@ -28,35 +42,16 @@
     };
     
     var birthDateFormat = "dd.MM.yyyy";
-
-    var BiometricsViewModel = app.ViewModelBase
+    
+        var MainViewModel = app.ViewModelBase
         .extend({
-                    'init': function() {
-                        app.ViewModelBase.fn.init.call(this);
-                        var that = this;
-                        this.bind("change", function(e) {
-                            if (e.field === "sex") {
-                                that.set("isHipsFieldVisible", that.sex === "Female");
-                            }
-                            
-                            if (e.field !== "bodyFat") {
-                                that.calculateBodyFat();
-                            }
-                        });
-                    },
-                    'isHipsFieldVisible': false,
-                    'loadProfile': function(profile) {
+                    'load': function(profile) {
                         var that = this;
             
                         var birthDate = kendo.parseDate(profile.birthDate);
                         that.set('birthDate', kendo.toString(birthDate, birthDateFormat));
                         that.set('height', profile.height);
                         that.set('sex', profile.sex);
-            
-                        that.set('weight', profile.weight);
-                        that.set('neck', profile.neck);
-                        that.set('waist', profile.waist);
-                        that.set('hips', profile.hips);
                     },
                     'save': function() {
                         var that = this;
@@ -64,13 +59,7 @@
                         var profile = {
                             'birthDate': kendo.parseDate(that.birthDate, birthDateFormat),
                             'height': that.height,
-                            'sex': that.sex,
-                
-                            'weight': that.weight,
-                            'neck': that.neck,
-                            'waist': that.waist,
-                            'hips': that.hips,
-                            'bodyFat' : that.bodyFat
+                            'sex': that.sex
                         };
                         
                         that.busyContent = "Saving profile data...";
@@ -79,18 +68,73 @@
                         that.waitForResult(saveProfileData);
                         return saveProfileData;
                     },
+                    'onGoToDashboard': function() {
+                        app.views.dashboard.navigateTo();
+                    },
+                    'onGoToNextStep': function() {
+                        this.save()
+                            .done(function() {
+                                app.views.profileBiometrics.navigateTo();
+                            });
+                    },
+            		'onSave': function() {
+                        this.save()
+                            .done(function() {
+                                app.views.naigateBack();
+                            });
+                    }
+                });
+
+    var BiometricsViewModel = app.ViewModelBase
+        .extend({
+                    'init': function() {
+                        app.ViewModelBase.fn.init.call(this);
+                        var that = this;
+                        this.bind("change", function(e) {                            
+                            if (e.field !== "bodyFat") {
+                                that.calculateBodyFat();
+                            }
+                        });
+                    },
+                    'isHipsFieldVisible': false,
+                    'load': function(biometrics) {
+                        var that = this;
+
+                        that.set('weight', biometrics.weight);
+                        that.set('neck', biometrics.neck);
+                        that.set('waist', biometrics.waist);
+                        that.set('hips', biometrics.hips);
+                    },
+                    'save': function() {
+                        var that = this;
+                        
+                        var biometrics = {                
+                            'weight': that.weight,
+                            'neck': that.neck,
+                            'waist': that.waist,
+                            'hips': that.hips,
+                            'bodyFat' : that.bodyFat
+                        };
+                        
+                        that.busyContent = "Saving biometrics data...";
+                        
+                        var saveBiometricsData = updateBiometrics(biometrics);
+                        that.waitForResult(saveBiometricsData);
+                        return saveBiometricsData;
+                    },
                     'calculateBodyFat': function() {
                         var that = this,
                             bodyFat = 0;
-                        
+                                                
                         // Formula taken from here http://www.wikihow.com/Measure-Body-Fat-Using-the-US-Navy-Method
+                        var height = app.profileService.mainViewModel.height;
                         if (that.sex === "Female") {
-                            bodyFat = 163.205 * log10(that.waist + that.hips - that.neck) - 97.684 * log10(that.height) - 104.912;
+                            bodyFat = 163.205 * log10(that.waist + that.hips - that.neck) - 97.684 * log10(height) - 104.912;
                         } else {
-                            bodyFat = 86.010 * log10(that.waist - that.neck) - 70.041 * log10(that.height) + 30.30;
+                            bodyFat = 86.010 * log10(that.waist - that.neck) - 70.041 * log10(height) + 30.30;
                         }
                         
-                        that.set('bodyFat', bodyFat);
+                        that.set('bodyFat', Math.round(bodyFat * 100) / 100);
                     },
                     'onGoToDashboard': function() {
                         app.views.dashboard.navigateTo();
@@ -99,6 +143,12 @@
                         this.save()
                             .done(function() {
                                 app.views.profileGoals.navigateTo();
+                            });
+                    },
+                    'onSave': function() {
+                        this.save()
+                            .done(function() {
+                                app.views.naigateBack();
                             });
                     }
                 });
@@ -144,16 +194,22 @@
                 });
 
     app.profileService = {
+        'mainViewModel': new MainViewModel(),
         'biometricsViewModel': new BiometricsViewModel(),
         'goalsViewModel': new GoalsViewModel(),
+        'isWizardMode': false,
         'initializeUserProfile': function (viewModel) {
             var initalizeUser = getProfile().done(function (profile) {
-                app.profileService.biometricsViewModel.loadProfile(profile);
+                app.profileService.mainViewModel.load(profile);
                 
-                if (!profile.isComplete) {
-                    app.views.profileWizard.navigateTo();
+                // TODO: Consider opening the biometrics view as well.
+                if (!profile.birthDate || !profile.height || !profile.sex) {
+                    app.profileService.isWizardMode = true;
+                    app.views.profileMain.navigateTo();
+                } else if (!profile.goal) {
+                    app.views.profileGoal.navigateTo();
                 } else {
-                    app.views.dashboard.navigateTo();
+					app.views.dashboard.navigateTo();
                 }
             })
                 .fail(function (err) {
@@ -165,7 +221,20 @@
             viewModel.busyContent = "Loading user profile...";
             viewModel.waitForResult(initalizeUser);
         },
-        'loadGoals': function () {
+        'biometricsViewShow': function() {
+            var viewModel = app.profileService.biometricsViewModel;
+			viewModel.set("isHipsFieldVisible", viewModel.sex === "Female");
+            viewModel.set("isWizard", app.profileService.isWizardMode);
+            viewModel.set("isNotWizard", !app.profileService.isWizardMode);
+            
+            viewModel.busyContent = "Loading biometrics data...";
+            viewModel.waitForResult(getBiometrics().done(function(r) {
+                viewModel.load(r);
+            }));
+        },
+        'goalsViewShow': function () {
+        },
+        'goalsViewInit': function () {
             var viewModel = app.profileService.goalsViewModel
             var initalizeGoals = getGoals()
                 .done(function(r) {

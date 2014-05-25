@@ -1,38 +1,13 @@
 <div data-role="view" data-layout="mobile-view" data-title="Configure profile"
-     data-model="app.profileService.biometricsViewModel">
+     data-model="app.profileService.biometricsViewModel" data-show="app.profileService.biometricsViewShow">
 	<header data-role="header">
         <div data-role="navbar">
             <span data-role="view-title"></span>
+            <a class="nav-button nav-button-back hide-text" data-align="left" data-role="backbutton">&lt;</a>
         </div>
     </header>
     <form>
 		<ul data-role="listview" data-style="inset">
-            <li>
-                <label>
-                    Birth date:
-                    <input type="text" data-bind="value : birthDate" />
-                </label>
-            </li>
-            <li>
-                <label>
-                	Height:
-                    <input type="number" data-bind="value : height" min="120" max="250" step="1" />
-                </label>
-            </li>
-            <li>
-                <label>
-                    Sex:
-                    <select data-bind="value : sex">
-                        <option>Male</option>
-                        <option>Female</option>
-                    </select>
-                </label>
-				<!--<ul class="align-right" data-role="buttongroup">
-                    <li>Male</li>
-                    <li>Female</li>
-                </ul>-->
-            </li>
-            <li></li>
             <li>
                 <label>
                     Weight:
@@ -66,10 +41,16 @@
                 <span>%</span>
             </li>
             
-            <li>
+            <li data-bind="visible: isWizard">
                 <div>
                     <a data-role="button" data-bind="click: onGoToDashboard">Configure Later</a>
                     <a data-role="button" class="align-right" data-bind="click: onGoToNextStep">Next Step</a>
+                </div>
+            </li>
+            
+            <li data-bind="visible: isNotWizard">
+                <div>
+                    <a data-role="button" class="align-right" data-bind="click: onSave">Save</a>
                 </div>
             </li>
         </ul>

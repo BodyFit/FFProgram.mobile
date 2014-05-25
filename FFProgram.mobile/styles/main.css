@@ -10,6 +10,10 @@ ul.tag-list li
 	display:inline;
 }
 
+.align-right {
+    float: right;
+}
+
 tag-list.tag-item {
     float: left;
     display:block;

@@ -7,6 +7,9 @@
 	});
 
 	app.dashboardService = {
-		viewModel: new ViewModel()
+		viewModel: new ViewModel(),
+        init: function() {
+            app.views.login.navigateTo();
+        }
 	};
 })(window);

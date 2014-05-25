@@ -15,16 +15,16 @@
 			that.busyContent = "Creating user...";
 			that.waitForResult(register);
 
-			register.done(function () {
+			register.fail(function (err) {
+				that.set('hasErrors', true);
+				that.set('errorHeader', "Error creating user: " + err.statusText);
+				that.set('errorText', err.responseText);
+			}).done(function () {
 				app.loginService
 					.authenticate(that.email, that.pass, that)
 					.done(function () {
 						return app.profileService.initializeUserProfile(that);
 					});
-			}).fail(function (err) {
-				that.set('hasErrors', true);
-				that.set('errorHeader', "Error creating user: " + err.statusText);
-				that.set('errorText', err.responseText);
 			});
 		}
 	});
