@@ -1,0 +1,41 @@
+<div data-role="view" data-layout="mobile-view" data-title="Configure profile"
+     data-model="app.profileService.goalsViewModel" data-init="app.profileService.loadGoals">
+    <header data-role="header">
+        <div data-role="navbar">
+            <span data-role="view-title"></span>
+            <a class="nav-button nav-button-back hide-text" data-align="left" data-role="backbutton">&lt;</a>
+        </div>
+    </header>
+
+    <ul id="goals-listview" data-style="inset" data-role="listview" data-template="goalTemplate"
+        data-bind="source: goals"></ul>
+
+    <footer>
+        <ul data-role="listview" data-style="inset">
+            <li>
+                <div>
+                    <a data-role="button" data-bind="click: onGoToDashboard">Choose Later</a>
+                </div>
+            </li>
+        </ul>
+    </footer>
+</div>
+
+<script type="text/x-kendo-template" id="goalTemplate">
+    <div data-role="touch" data-bind="events: { tap: onTap }" class="cf">
+        <div>
+            <ul class="tag-list">
+            # for (var i = 0; i < tags.length; i++) { #
+                <li class="tag-item">
+    				<object data="styles/images/#= tags[i] #.svg" type="image/png" width="25" height="25">
+    					<img src="styles/images/unknown.svg" width="25" height="25" />
+    				</object>
+                </li>
+            # } #
+            </ul>
+        </div>
+        <div class="goal-content">
+            <span data-bind="text: description"></span>
+        </div>
+    </div>
+</script>

@@ -1,5 +1,19 @@
-.align-right {
-    float: right
+ul.tag-list
+{
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+
+ul.tag-list li
+{
+	display:inline;
+}
+
+tag-list.tag-item {
+    float: left;
+    display:block;
+    list-style: none;
 }
 
 /* IMAGES */

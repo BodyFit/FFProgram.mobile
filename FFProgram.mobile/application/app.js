@@ -9,7 +9,7 @@
         
         // Load mocked up profile screen.
         //app.views.profileWizard.navigateTo();
-        //app.profileService.viewModel.loadProfile({
+        //app.profileService.biometricsViewModel.loadProfile({
         //    'birthDate': '2000-02-12',
         //    'height': 170,
         //    'sex': 'Female',
@@ -19,5 +19,22 @@
         //    'waist': 60,
         //    'hips': 85
         //});
+        
+        //app.views.profileGoals.navigateTo();
+        //app.profileService.goalsViewModel
+        //    .initGoals([{
+        //            "tags": ["preserve", "decrease", "training"],
+        //            "description": "Понижаване на теглото с максимално запазване на мускулната маса с тренировки."
+        //        }, {
+        //            "tags": ["preserve", "healthy", "muscles", "spas"],
+        //            "description": "Понижаване на теглото с максимално запазване на мускулната маса с тренировки."
+        //        }, {
+        //            "tags": ["preserve", "healthy", "muscles", "spas"],
+        //            "description": "Понижаване на теглото с максимално запазване на мускулната маса с тренировки."
+        //        }, {
+        //            "tags": ["preserve", "healthy", "muscles", "spas"],
+        //            "description": "Понижаване на теглото с максимално запазване на мускулната маса с тренировки."
+        //        }
+        //               ]);
     }, false);
 })(window);

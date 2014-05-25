@@ -15,6 +15,7 @@
 		register: new PageDesciption("views/register-view.html"),
 		dashboard: new PageDesciption("views/dashboard-view.html"),
 		profileWizard: new PageDesciption("views/profile/profile-wizard.html"),
+        profileGoals: new PageDesciption("views/profile/profile-goals.html"),
 		profileConfig: new PageDesciption("views/profile/profile-view.html"),
 		about: new PageDesciption("views/about-view.html"),
 		settings: new PageDesciption("views/settings-view.html")

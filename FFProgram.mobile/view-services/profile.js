@@ -1,6 +1,5 @@
 (function (global) {
-    var ViewModel,
-        app = global.app = global.app || {},
+    var app = global.app = global.app || {},
         data = app.data = app.data || {};
     
     var log10 = function(val) {
@@ -21,9 +20,16 @@
             .put(profile);
     };
     
+    var getGoals = function () {
+        return data.defaultClient.buildRequest()
+            .addToRoute("api")
+            .addToRoute("goals")
+            .get();
+    };
+    
     var birthDateFormat = "dd.MM.yyyy";
 
-    ViewModel = app.ViewModelBase
+    var BiometricsViewModel = app.ViewModelBase
         .extend({
                     'init': function() {
                         app.ViewModelBase.fn.init.call(this);
@@ -39,7 +45,6 @@
                         });
                     },
                     'isHipsFieldVisible': false,
-                    'someText': "Lorem ipsum...",
                     'loadProfile': function(profile) {
                         var that = this;
             
@@ -53,7 +58,7 @@
                         that.set('waist', profile.waist);
                         that.set('hips', profile.hips);
                     },
-                    'saveProfile': function() {
+                    'save': function() {
                         var that = this;
                         
                         var profile = {
@@ -69,10 +74,10 @@
                         };
                         
                         that.busyContent = "Saving profile data...";
-                        that.waitForResult(updateProfile(profile));
-                    },
-                    'onGoToDashboard': function() {
-                        app.views.dashboard.navigateTo();
+                        
+                        var saveProfileData = updateProfile(profile);
+                        that.waitForResult(saveProfileData);
+                        return saveProfileData;
                     },
                     'calculateBodyFat': function() {
                         var that = this,
@@ -87,16 +92,63 @@
                         
                         that.set('bodyFat', bodyFat);
                     },
+                    'onGoToDashboard': function() {
+                        app.views.dashboard.navigateTo();
+                    },
                     'onGoToNextStep': function() {
-                        this.saveProfile();
+                        this.save()
+                            .done(function() {
+                                app.views.profileGoals.navigateTo();
+                            });
+                    }
+                });
+    
+    var GoalsViewModel = app.ViewModelBase
+        .extend({
+                    'initGoals': function(goals) {
+                        var that = this;
+                        
+                        var goalViewModels = [];
+                        $.each(goals, function(i, goal) {
+                            goalViewModels
+                                .push({
+                                          'tags': goal.tags,
+                                          'description': goal.description,
+                                          'onTap': function() {
+                                              that.setGoal(goal)
+                                                  .done(function() {
+                                                      app.views.dashboard.navigateTo();
+                                                  });
+                                          }
+                                      });
+                        });
+                        
+                        that.set('goals', goalViewModels);
+                    },
+                    'setGoal': function(goal) {
+                        var that = this;
+                        
+                        var profile = {
+                            'goal': goal.id
+                        };
+                        
+                        that.busyContent = "Saving profile data...";
+                        
+                        var saveProfileData = updateProfile(profile);
+                        that.waitForResult(saveProfileData);
+                        return saveProfileData;
+                    },
+                    'onGoToDashboard': function() {
+                        app.views.dashboard.navigateTo();
                     }
                 });
 
     app.profileService = {
-        viewModel: new ViewModel(),
-        initializeUserProfile: function (viewModel) {
+        'biometricsViewModel': new BiometricsViewModel(),
+        'goalsViewModel': new GoalsViewModel(),
+        'initializeUserProfile': function (viewModel) {
             var initalizeUser = getProfile().done(function (profile) {
-                app.profileService.viewModel.loadProfile(profile);
+                app.profileService.biometricsViewModel.loadProfile(profile);
                 
                 if (!profile.isComplete) {
                     app.views.profileWizard.navigateTo();
@@ -112,6 +164,21 @@
 
             viewModel.busyContent = "Loading user profile...";
             viewModel.waitForResult(initalizeUser);
-        }
+        },
+        'loadGoals': function () {
+            var viewModel = app.profileService.goalsViewModel
+            var initalizeGoals = getGoals()
+                .done(function(r) {
+                    viewModel.initGoals(r);
+                })
+                .fail(function (err) {
+                    viewModel.set('hasErrors', true);
+                    viewModel.set('errorHeader', "Error loading goals: " + err.statusText);
+                    viewModel.set('errorText', err.responseText);
+                });
+
+            viewModel.busyContent = "Loading goals...";
+            viewModel.waitForResult(initalizeGoals);
+        },
     };
 })(window);
