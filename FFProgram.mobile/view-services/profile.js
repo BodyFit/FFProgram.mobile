@@ -116,6 +116,14 @@
                             'bodyFat' : that.bodyFat
                         };
                         
+                        var profile = app.profileService.profile;
+
+                        profile.weight = that.weight;
+                        profile.neck = that.neck;
+                        profile.waist = that.waist;
+                        profile.hips = that.hips;
+                        profile.bodyFat = that.bodyFat;
+                        
                         that.busyContent = "Saving biometrics data...";
                         
                         var saveBiometricsData = updateBiometrics(biometrics);
@@ -167,7 +175,7 @@
                                           'onTap': function() {
                                               that.setGoal(goal)
                                                   .done(function() {
-                                                      app.views.dashboard.navigateTo();
+                                                      app.views.programOverview.navigateTo();
                                                   });
                                           }
                                       });
@@ -181,6 +189,8 @@
                         var profile = {
                             'goal': goal.id
                         };
+                        
+                        app.profileService.profile.goal = goal.id;
                         
                         that.busyContent = "Saving profile data...";
                         
@@ -200,6 +210,7 @@
         'isWizardMode': false,
         'initializeUserProfile': function (viewModel) {
             var initalizeUser = getProfile().done(function (profile) {
+                app.profileService.profile = profile;
                 app.profileService.mainViewModel.load(profile);
                 
                 // TODO: Consider opening the biometrics view as well.
@@ -207,7 +218,7 @@
                     app.profileService.isWizardMode = true;
                     app.views.profileMain.navigateTo();
                 } else if (!profile.goal) {
-                    app.views.profileGoal.navigateTo();
+                    app.views.profileGoals.navigateTo();
                 } else {
 					app.views.dashboard.navigateTo();
                 }
