@@ -20,6 +20,8 @@
             .addToRoute("profile")
             .put(profile);
     };
+    
+    var birthDateFormat = "dd.MM.yyyy";
 
     ViewModel = app.ViewModelBase
         .extend({
@@ -41,7 +43,8 @@
                     'loadProfile': function(profile) {
                         var that = this;
             
-                        that.set('birthDate', profile.birthDate);
+                        var birthDate = kendo.parseDate(profile.birthDate);
+                        that.set('birthDate', kendo.toString(birthDate, birthDateFormat));
                         that.set('height', profile.height);
                         that.set('sex', profile.sex);
             
@@ -54,7 +57,7 @@
                         var that = this;
                         
                         var profile = {
-                            'birthDate': that.birthDate,
+                            'birthDate': kendo.parseDate(that.birthDate, birthDateFormat),
                             'height': that.height,
                             'sex': that.sex,
                 
