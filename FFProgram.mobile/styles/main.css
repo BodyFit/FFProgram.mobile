@@ -1,3 +1,7 @@
+.align-right {
+    float: right
+}
+
 /* IMAGES */
 .welcome-image {
     background-image: url(../styles/images/appbuilder.png);

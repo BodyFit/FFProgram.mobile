@@ -1,6 +1,14 @@
 <div data-role="view" data-layout="mobile-view" data-title="Register"
      data-model="app.registerService.viewModel" data-hide="app.registerService.clear"
      data-transition="overlay:right">
+    
+	<header data-role="header">
+        <div data-role="navbar">
+            <span data-role="view-title"></span>
+            <a class="nav-button nav-button-back hide-text" data-align="left" data-role="backbutton">&lt;</a>
+        </div>
+    </header>
+    
     <ul data-role="listview" data-style="inset">
         <li>
             <label>
@@ -26,12 +34,12 @@
                 <span data-bind="text: errorText" style="font-size:smaller; color:red"></span>
             </p>
         </li>
+        
+        <li>
+            <div>
+                <a data-role="button" href="#:back">Cancel</a>
+                <a data-role="button" class="align-right" data-bind="click: onRegister">Cancel</a>
+			</div>
+        </li>
     </ul>
-
-    <div data-role="footer">
-        <div data-role="navbar">
-            <button data-role="button" data-align="left" data-bind="click: onCancel">Cancel</button>
-            <button data-role="button" data-align="right" data-bind="click: onRegister">Register</button>
-        </div>
-    </div>
 </div>

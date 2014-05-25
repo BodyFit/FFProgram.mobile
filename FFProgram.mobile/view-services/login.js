@@ -13,7 +13,7 @@
 			app.loginService
 				.authenticate(that.email, that.pass, that)
 				.done(function () {
-					return app.profileService.initializeUser(that);
+					return app.profileService.initializeUserProfile(that);
 				});
 		},
 		onRegister: function () {

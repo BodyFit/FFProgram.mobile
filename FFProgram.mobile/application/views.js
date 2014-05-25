@@ -2,6 +2,9 @@
 	var app = global.app = global.app || {};
 
 	var PageDesciption = function (uri) {
+        this.getUri = function () {
+    		return uri;  
+        };
 		this.navigateTo = function () {
 			app.application.navigate(uri);
 		}

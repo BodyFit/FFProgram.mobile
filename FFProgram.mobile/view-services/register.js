@@ -19,16 +19,13 @@
 				app.loginService
 					.authenticate(that.email, that.pass, that)
 					.done(function () {
-						return app.profileService.initializeUser(that);
+						return app.profileService.initializeUserProfile(that);
 					});
 			}).fail(function (err) {
 				that.set('hasErrors', true);
 				that.set('errorHeader', "Error creating user: " + err.statusText);
 				that.set('errorText', err.responseText);
 			});
-		},
-		onCancel: function () {
-			app.views.login.navigateTo();
 		}
 	});
 
