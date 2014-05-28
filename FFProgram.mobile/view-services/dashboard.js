@@ -21,31 +21,31 @@
 
     app.dashboardService = {
         viewModel: new ViewModel(),
-        dashboardInit: function() {
-            // TODO: Do this only if the user is not logged in.
-            app.views.login.navigateTo();
-        },
         dashboardShow: function() {
-            var viewModel = app.dashboardService.viewModel;
-            var historyRequest = getBiometricsHistory()
-                .done(function(r) { 
-                    viewModel.loadHistory(r); 
-                });
-            var programRequest = app.programService
-                .getProgram(app.profileService.profile.goal)
-                .done(function(r) { 
-                    viewModel.loadProgram(r); 
-                });
+            if (!app.profileService.profile) {
+                app.views.login.navigateTo();
+            } else {
+                var viewModel = app.dashboardService.viewModel;
+                var historyRequest = getBiometricsHistory()
+                    .done(function(r) { 
+                        viewModel.loadHistory(r); 
+                    });
+                var programRequest = app.programService
+                    .getProgram(app.profileService.profile.goal)
+                    .done(function(r) { 
+                        viewModel.loadProgram(r); 
+                    });
             
-            var requests = $.when(historyRequest, programRequest)
-                .fail(function(err) {
-                    viewModel.set('hasErrors', true);
-                    viewModel.set('errorHeader', "Error loading goals: " + err.statusText);
-                    viewModel.set('errorText', err.responseText);
-                });
+                var requests = $.when(historyRequest, programRequest)
+                    .fail(function(err) {
+                        viewModel.set('hasErrors', true);
+                        viewModel.set('errorHeader', "Error loading goals: " + err.statusText);
+                        viewModel.set('errorText', err.responseText);
+                    });
             
-            viewModel.busyContent = "Loading dashboard...";
-            viewModel.waitForResult(requests);
+                viewModel.busyContent = "Loading dashboard...";
+                viewModel.waitForResult(requests);
+            }
         }
     };
 })(window);

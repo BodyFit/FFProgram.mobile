@@ -26,9 +26,21 @@
     <script src="view-services/program.js"></script>
 
     <script src="application/views.js"></script>
+    <script src="application/navigation.js"></script>
     <script src="application/app.js"></script>
 </head>
 <body>
+    <div data-role="drawer" id="my-drawer" style="width: 270px" data-model="app.navigationService.drawerViewModel" data-before-show="app.navigationService.beforeShowDrawer">
+<!--        <ul data-role="listview" data-type="group">
+            <li>Program
+                <ul data-bind="source: views" data-template="viewLinkTemplate" data-style="inset" data-role="listview">
+                </ul>
+            </li>
+        </ul>-->
+        <ul data-bind="source: views" data-template="viewLinkTemplate" data-style="inset" data-role="listview">
+        </ul>
+    </div>    
+    
     <div data-role="view" data-title="Welcome" id="home-view">
         <h3>Welcome in FFProgram</h3>
         <span>Loading your data...</span>
@@ -42,4 +54,8 @@
         </header>
     </div>
 </body>
+    
+<script type="text/x-kendo-template" id="viewLinkTemplate">
+    <a data-bind="attr: {href: url}" data-transition="none"><span data-bind="text: name"></span></a>
+</script>
 </html>
