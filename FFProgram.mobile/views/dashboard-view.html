@@ -1,12 +1,41 @@
 <div data-role="view" data-layout="mobile-view" data-title="Dashboard"
-     data-model="app.dashboardService.viewModel" data-show="app.dashboardService.dashboardShow">
-	<header data-role="header">
+     data-model="app.dashboardService.viewModel" data-show="app.dashboardService.dashboardShow"
+     data-init="app.dashboardService.dashboardInit"  style="width:100%, heiht:100%">
+    <header data-role="header">
         <div data-role="navbar">
-            <!--<a data-role="button" data-rel="drawer" href="#my-drawer" data-icon="drawer-button" data-align="left"></a>-->
+            <a data-role="button" data-rel="drawer" href="#my-drawer" data-icon="drawer-button" data-align="left"></a>
             <span data-role="view-title"></span>
         </div>
     </header>
-	<span>
-
-    </span>
+    <div style="background: white">       
+        <div style="height: 120px"
+             data-role="chart" data-tooltip="visible: false" data-bind="source: dayProgram"
+             data-series-defaults="{ type: 'bar' }"
+             data-series="[{ name: 'carbs', field: 'carbs' }, { name: 'proteins', field: 'prots' }, { name: 'fats', field: 'fats' }]">
+        </div>
+        <ul class="horizontalList" data-role="listview" data-bind="source: weekProgram" data-template="dayChartTemplate">
+        </ul>        
+    </div>
+    
+    <div style="background: white">
+        <div id="weightChart" data-role="chart" style="height: 200px"
+             data-legend="{ visible: false }"
+             data-plot-area="{ margin: 0 }"
+             data-value-axis="{ labels: { format: '{0}' }, line: { visible: false } }"
+             data-category-axis="{ majorGridLines: { visible: true }, labels: { format: 'dd/MM', rotation: -90 }, line: { visible: false } }"
+             data-bind="source: history"
+             data-series-defaults="{ type: 'line', style: 'smooth' }"
+             data-series="[{ name: 'weight', aggregate: 'avg', field: 'value', categoryField: 'date' }]">
+        </div>
+    </div>
 </div>
+
+<script type="text/x-kendo-template" id="dayChartTemplate">
+    <div>
+        <span data-bind="text: title" style="display: block; text-align: center;"></span>
+        <div data-bind="source: data" data-role="sparkline" data-tooltip="visible: false"
+             data-series="[{ type: 'pie', field: '.' }]"
+             style="width: 45px; line-height: 41px; display: block;">
+        </div>
+    </div>
+</script>

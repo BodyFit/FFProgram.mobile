@@ -2,9 +2,11 @@
     var DrawerViewModel,
         app = global.app = global.app || {};
     
-    var PageDesciption = function (title, url) {
+    var PageDesciption = function (url, title, icon) {
         this.title = title;
         this.url = url;
+        this.icon = icon;
+        
         this.getUri = function () {
     		return url;  
         };
@@ -14,21 +16,22 @@
 	};
     
 	app.views = {
-		login: new PageDesciption("Login", "views/login-view.html"),
-		register: new PageDesciption("Register", "views/register-view.html"),
-		dashboard: new PageDesciption("Dashboard", "views/dashboard-view.html"),
-        programOverview: new PageDesciption("Overview", "views/program-overview-view.html"),
-		profileMain: new PageDesciption("Profile main", "views/profile/profile-main.html"),
-        profileBiometrics: new PageDesciption("Biometrics", "views/profile/profile-biometrics.html"),
-        profileGoals: new PageDesciption("Goals", "views/profile/profile-goals.html"),
-		profilePreferences: new PageDesciption("Preferences", "views/profile/profile-preferences.html"),
-		about: new PageDesciption("About", "views/about-view.html"),
-		settings: new PageDesciption("Settings", "views/settings-view.html")
+		login: new PageDesciption("views/login-view.html", "Login"),
+		register: new PageDesciption("views/register-view.html", "Register"),
+		dashboard: new PageDesciption("views/dashboard-view.html", "Dashboard", "tiles"),
+        programOverview: new PageDesciption("views/program-overview-view.html", "Overview", "eye"),
+		profileMain: new PageDesciption("views/profile/profile-main.html", "Profile main"),
+        profileBiometrics: new PageDesciption("views/profile/profile-biometrics.html", "Biometrics", "bars"),
+        profileGoals: new PageDesciption("views/profile/profile-goals.html", "Goals"),
+		profilePreferences: new PageDesciption("views/profile/profile-preferences.html", "Preferences", "half-heart"),
+		about: new PageDesciption("views/about-view.html", "About", "about"),
+		settings: new PageDesciption("views/settings-view.html", "Settings", "settings")
 	}
     
-    app.navigationViews = [app.views.dashboard,
+    app.navigationViews = [app.views.dashboard,    						
+    						app.views.programOverview,
     						app.views.profileBiometrics,
-    						app.views.programOverview, 
+    						app.views.profilePreferences,
     						app.views.about,
     						app.views.settings];
     
@@ -40,10 +43,7 @@
                         
                         var viewsList = [];
                         $.each(app.navigationViews, function(i, v) {
-                            viewsList.push({
-                                'name': v.title,
-                                'url': v.url
-                            });
+                            viewsList.push(v);
                         });
                         
                         that.set('views', viewsList);
@@ -60,7 +60,7 @@
                     return;
                 }
             }
-            e.preventDefault();
+//            e.preventDefault();
         }
     };
 })(window);
