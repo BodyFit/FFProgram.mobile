@@ -1,7 +1,9 @@
 <div data-role="view" data-layout="mobile-view" data-title="Configure profile"
-     data-model="app.profileService.mainViewModel">
+     data-model="app.profileService.mainViewModel" data-show="app.profileService.mainViewShow">
 	<header data-role="header">
         <div data-role="navbar">
+            <a class="nav-button hide-text" data-rel="drawer" href="#my-drawer" data-icon="drawer-button"
+               data-align="left" data-role="button" data-bind="visible: isSinglePage"></a>
             <span data-role="view-title"></span>
         </div>
     </header>
@@ -33,10 +35,16 @@
                 </ul>-->
             </li>
             
-            <li>
+            <li data-bind="visible: isWizardPage">
                 <div>
                     <a data-role="button" data-bind="click: onGoToDashboard">Configure Later</a>
                     <a data-role="button" class="align-right" data-bind="click: onGoToNextStep">Next Step</a>
+                </div>
+            </li>
+            
+            <li data-bind="visible: isSinglePage">
+                <div>
+                    <a data-role="button" class="align-right" data-bind="click: onSave">Save</a>
                 </div>
             </li>
         </ul>

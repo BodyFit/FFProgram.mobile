@@ -43,8 +43,51 @@
     
     var birthDateFormat = "dd.MM.yyyy";
     
-        var MainViewModel = app.ViewModelBase
+    var saveToCache = function(p) {
+        $.each(p, function(k, v) {
+            app.profileService.profile[k] = v;
+        });
+    }
+    
+    var ProfileViewModel = app.ViewModelBase
         .extend({
+                    'setIsWizardPage': function(isWizardPage) {
+                        this.set('isSinglePage', !isWizardPage);
+                        this.set('isWizardPage', isWizardPage);
+                    },
+                    'onShow': function(params) {
+                        this.setIsWizardPage(params && params.isWizardPage);
+                    },
+                    'onGoToDashboard': function() {
+                        app.views.dashboard.navigateTo();
+                    },
+                    'onGoToNextStep': function() {
+                        var that = this;                    
+                        this.save()
+                            .done(function() {
+                                if (that.nextStep) {
+                                    that.nextStep.navigateTo({ 'isWizardPage': that.isWizardPage });
+                                } else {
+                                    app.views.dashboard.navigateTo();
+                                }
+                            });
+                    },
+                    'onSave': function() {
+                        this.save()
+                            .done(function() {
+                                app.views.naigateBack();
+                            });
+                    },
+                    'save': function() {
+                        var deferred = new $.Deferred();
+                        deferred.resolve();
+                        return deferred.promise();
+                    }
+                });
+    
+    var MainViewModel = ProfileViewModel
+        .extend({
+                    'nextStep': app.views.profileBiometrics,
                     'load': function(profile) {
                         var that = this;
             
@@ -62,31 +105,19 @@
                             'sex': that.sex
                         };
                         
+                        saveToCache(profile);
+                        
                         that.busyContent = "Saving profile data...";
                         
                         var saveProfileData = updateProfile(profile);
                         that.waitForResult(saveProfileData);
                         return saveProfileData;
-                    },
-                    'onGoToDashboard': function() {
-                        app.views.dashboard.navigateTo();
-                    },
-                    'onGoToNextStep': function() {
-                        this.save()
-                            .done(function() {
-                                app.views.profileBiometrics.navigateTo();
-                            });
-                    },
-            		'onSave': function() {
-                        this.save()
-                            .done(function() {
-                                app.views.naigateBack();
-                            });
                     }
                 });
 
-    var BiometricsViewModel = app.ViewModelBase
+    var BiometricsViewModel = ProfileViewModel
         .extend({
+                    'nextStep': app.views.profileGoals,
                     'init': function() {
                         app.ViewModelBase.fn.init.call(this);
                         var that = this;
@@ -116,13 +147,7 @@
                             'bodyFat' : that.bodyFat
                         };
                         
-                        var profile = app.profileService.profile;
-
-                        profile.weight = that.weight;
-                        profile.neck = that.neck;
-                        profile.waist = that.waist;
-                        profile.hips = that.hips;
-                        profile.bodyFat = that.bodyFat;
+                        saveToCache(biometrics);
                         
                         that.busyContent = "Saving biometrics data...";
                         
@@ -143,40 +168,26 @@
                         }
                         
                         that.set('bodyFat', Math.round(bodyFat * 100) / 100);
-                    },
-                    'onGoToDashboard': function() {
-                        app.views.dashboard.navigateTo();
-                    },
-                    'onGoToNextStep': function() {
-                        this.save()
-                            .done(function() {
-                                app.views.profileGoals.navigateTo();
-                            });
-                    },
-                    'onSave': function() {
-                        this.save()
-                            .done(function() {
-                                app.views.naigateBack();
-                            });
                     }
                 });
     
-    var GoalsViewModel = app.ViewModelBase
+    var GoalsViewModel = ProfileViewModel
         .extend({
+                    'nextStep': app.views.programOverview,
                     'initGoals': function(goals) {
                         var that = this;
                         
                         var goalViewModels = [];
+                        var goToNext = function() {
+                            that.onGoToNextStep();
+                        };
                         $.each(goals, function(i, goal) {
                             goalViewModels
                                 .push({
                                           'tags': goal.tags,
                                           'description': goal.description,
                                           'onTap': function() {
-                                              that.setGoal(goal)
-                                                  .done(function() {
-                                                      app.views.programOverview.navigateTo();
-                                                  });
+                                              that.setGoal(goal).done(goToNext);
                                           }
                                       });
                         });
@@ -190,24 +201,30 @@
                             'goal': goal.id
                         };
                         
-                        app.profileService.profile.goal = goal.id;
+                        saveToCache(profile);
                         
                         that.busyContent = "Saving profile data...";
                         
                         var saveProfileData = updateProfile(profile);
                         that.waitForResult(saveProfileData);
                         return saveProfileData;
-                    },
-                    'onGoToDashboard': function() {
-                        app.views.dashboard.navigateTo();
                     }
+                });
+
+    var PreferencesViewModel = ProfileViewModel
+        .extend({
+                });
+    
+    var ProgramOverviewViewModel = ProfileViewModel
+        .extend({
                 });
 
     app.profileService = {
         'mainViewModel': new MainViewModel(),
         'biometricsViewModel': new BiometricsViewModel(),
         'goalsViewModel': new GoalsViewModel(),
-        'isWizardMode': false,
+        'preferencesViewModel': new PreferencesViewModel(),
+        'overviewViewModel': new ProgramOverviewViewModel(),
         'initializeUserProfile': function (viewModel) {
             var initalizeUser = getProfile().done(function (profile) {
                 app.profileService.profile = profile;
@@ -215,35 +232,46 @@
                 
                 // TODO: Consider opening the biometrics view as well.
                 if (!profile.birthDate || !profile.height || !profile.sex) {
-                    app.profileService.isWizardMode = true;
-                    app.views.profileMain.navigateTo();
+                    app.views.profileMain.navigateTo({ 'isWizardPage': true });
                 } else if (!profile.goal) {
-                    app.views.profileGoals.navigateTo();
+                    app.views.profileGoals.navigateTo({ 'isWizardPage': true });
                 } else {
-					app.views.dashboard.navigateTo();
+                    app.views.dashboard.navigateTo();
                 }
-            })
-                .fail(function (err) {
-                    viewModel.set('hasErrors', true);
-                    viewModel.set('errorHeader', "Error loading profile: " + err.statusText);
-                    viewModel.set('errorText', err.responseText);
-                });
+            }).fail(function (err) {
+                viewModel.set('hasErrors', true);
+                viewModel.set('errorHeader', "Error loading profile: " + err.statusText);
+                viewModel.set('errorText', err.responseText);
+            });
 
             viewModel.busyContent = "Loading user profile...";
             viewModel.waitForResult(initalizeUser);
         },
-        'biometricsViewShow': function() {
+        'mainViewShow': function (e) {
+            var viewModel = app.profileService.mainViewModel;
+            viewModel.onShow(e.view.params);
+        },
+        'biometricsViewShow': function (e) {
             var viewModel = app.profileService.biometricsViewModel;
-			viewModel.set("isHipsFieldVisible", viewModel.sex === "Female");
-            viewModel.set("isWizard", app.profileService.isWizardMode);
-            viewModel.set("isNotWizard", !app.profileService.isWizardMode);
+            viewModel.onShow(e.view.params);
+            viewModel.set("isHipsFieldVisible", app.profileService.profile.sex === "Female");
             
             viewModel.busyContent = "Loading biometrics data...";
             viewModel.waitForResult(getBiometrics().done(function(r) {
                 viewModel.load(r);
             }));
         },
-        'goalsViewShow': function () {
+        'goalsViewShow': function (e) {
+            var viewModel = app.profileService.goalsViewModel;
+            viewModel.onShow(e.view.params);
+        },
+        'preferencesViewShow': function (e) {
+            var viewModel = app.profileService.preferencesViewModel;
+            viewModel.onShow(e.view.params);
+        },
+        'overviewViewShow': function (e) {
+            var viewModel = app.profileService.overviewViewModel;
+            viewModel.onShow(e.view.params);
         },
         'goalsViewInit': function () {
             var viewModel = app.profileService.goalsViewModel

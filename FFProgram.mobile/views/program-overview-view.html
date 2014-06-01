@@ -1,6 +1,16 @@
 <div data-role="view" data-layout="mobile-view" data-title="Overview"
-     data-model="app.programService.viewModel">
-    <span>
-        Settings
-    </span>
+     data-model="app.profileService.overviewViewModel" data-show="app.profileService.overviewViewShow">
+    <header data-role="header">
+        <div data-role="navbar">
+            <a class="nav-button hide-text" data-rel="drawer" href="#my-drawer" data-icon="drawer-button"
+               data-align="left" data-role="button" data-bind="visible: isSinglePage"></a>
+            <a class="nav-button nav-button-back hide-text" data-align="left" data-role="backbutton"
+               data-bind="visible: isWizardPage">&lt;</a>
+            <span data-role="view-title"></span>
+        </div>
+    </header>
+
+    <div>
+        <a data-role="button" class="align-right" data-bind="click: onGoToDashboard">Go to dashboard</a>
+    </div>
 </div>

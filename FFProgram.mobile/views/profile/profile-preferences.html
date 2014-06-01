@@ -1,6 +1,26 @@
 <div data-role="view" data-layout="mobile-view" data-title="Profile settings"
-     data-model="app.profileService.viewModel">
-    <span>
-        Profile configurator
-    </span>
+     data-model="app.profileService.preferencesViewModel" data-show="app.profileService.preferencesViewShow">
+    <header data-role="header">
+        <div data-role="navbar">
+            <a class="nav-button hide-text" data-rel="drawer" href="#my-drawer" data-icon="drawer-button"
+               data-align="left" data-role="button" data-bind="visible: isSinglePage"></a>
+            <a class="nav-button nav-button-back hide-text" data-align="left" data-role="backbutton"
+               data-bind="visible: isWizardPage">&lt;</a>
+            <span data-role="view-title"></span>
+        </div>
+    </header>
+    <ul data-role="listview">
+        <li data-bind="visible: isWizardPage">
+            <div>
+                <a data-role="button" data-bind="click: onGoToDashboard">Configure Later</a>
+                <a data-role="button" class="align-right" data-bind="click: onGoToNextStep">Next Step</a>
+            </div>
+        </li>
+
+        <li data-bind="visible: isSinglePage">
+            <div>
+                <a data-role="button" class="align-right" data-bind="click: onSave">Save</a>
+            </div>
+        </li>
+    </ul>
 </div>

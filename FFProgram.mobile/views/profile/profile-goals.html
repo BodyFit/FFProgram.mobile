@@ -1,24 +1,26 @@
 <div data-role="view" data-layout="mobile-view" data-title="Configure profile"
-     data-model="app.profileService.goalsViewModel" data-init="app.profileService.goalsViewInit">
-    <header data-role="header">
+     data-model="app.profileService.goalsViewModel" data-show="app.profileService.goalsViewShow"
+     data-init="app.profileService.goalsViewInit">
+	<header data-role="header">
         <div data-role="navbar">
+            <a class="nav-button hide-text" data-rel="drawer" href="#my-drawer" data-icon="drawer-button"
+               data-align="left" data-role="button" data-bind="visible: isSinglePage"></a>
+            <a class="nav-button nav-button-back hide-text" data-align="left" data-role="backbutton"
+               data-bind="visible: isWizardPage">&lt;</a>
             <span data-role="view-title"></span>
-            <a class="nav-button nav-button-back hide-text" data-align="left" data-role="backbutton">&lt;</a>
         </div>
     </header>
 
     <ul id="goals-listview" data-style="inset" data-role="listview" data-template="goalTemplate"
         data-bind="source: goals"></ul>
 
-    <footer>
-        <ul data-role="listview" data-style="inset">
-            <li>
-                <div>
-                    <a data-role="button" data-bind="click: onGoToDashboard">Choose Later</a>
-                </div>
-            </li>
-        </ul>
-    </footer>
+    <ul data-role="listview" data-style="inset">
+        <li data-bind="visible: isWizardPage">
+            <div>
+                <a data-role="button" data-bind="click: onGoToDashboard">Choose Later</a>
+            </div>
+        </li>
+    </ul>
 </div>
 
 <script type="text/x-kendo-template" id="goalTemplate">

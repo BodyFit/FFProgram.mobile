@@ -1,17 +1,24 @@
 (function (global) {
     var DrawerViewModel,
-        app = global.app = global.app || {};
+        app = global.app = global.app || {},
+		data = app.data = app.data || {};
     
     var PageDesciption = function (url, title, icon) {
         this.title = title;
         this.url = url;
         this.icon = icon;
-        
-        this.getUri = function () {
-    		return url;  
-        };
-		this.navigateTo = function () {
-			app.application.navigate(url);
+
+		this.navigateTo = function (params) {
+            if (params) {
+                var builder = new data.RequestBuilder(url);
+                $.each(params, function(key, value) {
+                    builder.addToQuery(key, value);
+                });
+                
+                app.application.navigate(builder.getUri());
+            } else {
+                app.application.navigate(url);
+            }
 		}
 	};
     
@@ -20,18 +27,24 @@
 		register: new PageDesciption("views/register-view.html", "Register"),
 		dashboard: new PageDesciption("views/dashboard-view.html", "Dashboard", "tiles"),
         programOverview: new PageDesciption("views/program-overview-view.html", "Overview", "eye"),
-		profileMain: new PageDesciption("views/profile/profile-main.html", "Profile main"),
+		profileMain: new PageDesciption("views/profile/profile-main.html", "Profile main", "contacts"),
         profileBiometrics: new PageDesciption("views/profile/profile-biometrics.html", "Biometrics", "bars"),
-        profileGoals: new PageDesciption("views/profile/profile-goals.html", "Goals"),
+        profileGoals: new PageDesciption("views/profile/profile-goals.html", "Goals", "toprated"),
 		profilePreferences: new PageDesciption("views/profile/profile-preferences.html", "Preferences", "half-heart"),
 		about: new PageDesciption("views/about-view.html", "About", "about"),
-		settings: new PageDesciption("views/settings-view.html", "Settings", "settings")
+		settings: new PageDesciption("views/settings-view.html", "Settings", "settings"),
+        
+        naigateBack: function () {
+            app.application.navigate("#:back");
+        }
 	}
     
     app.navigationViews = [app.views.dashboard,    						
     						app.views.programOverview,
     						app.views.profileBiometrics,
     						app.views.profilePreferences,
+        					app.views.profileMain,
+    						app.views.profileGoals,
     						app.views.about,
     						app.views.settings];
     

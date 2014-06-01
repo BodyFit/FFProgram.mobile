@@ -59,7 +59,7 @@
         viewModel: new ViewModel(),
         dashboardShow: function() {
             var viewModel = app.dashboardService.viewModel;
-            app.profileService.profile = { goal: 1 };
+            //app.profileService.profile = { goal: 1 };
             
             if (!app.profileService.profile) {
                 app.views.login.navigateTo();
