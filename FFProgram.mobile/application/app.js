@@ -6,6 +6,7 @@
 
         app.application = new kendo.mobile.Application(document.body, { layout: "mobile-view", transition: "slide", skin: 'flat', initial: app.views.dashboard.url });
         
+        app.livecycle.bootstrap();
         // Load mocked up profile screen.
         //app.views.profileWizard.navigateTo();
         //app.profileService.biometricsViewModel.loadProfile({

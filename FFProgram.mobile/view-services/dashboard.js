@@ -24,66 +24,42 @@
         //    .get();
     };
     
-    var days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
     ViewModel = app.ViewModelBase
         .extend({
                     loadHistory: function(history) {
                         this.set("history", history);
                     },
                     loadProgram: function(program) {
-                        var weekProgram = [];
-                        var carbs = program.carbs;
-                        var prots = program.proteins;
-                        var fats = program.fats;
-                        
-                        for (var i = 0; i < carbs.length; i++) {
-                            var day = {
-                                title: days[i],
-                                data: [carbs[i], prots[i], fats[i]]
-                            };
-                            weekProgram.push(day);
-						}
-                        
-                        var dayProgram = [{
-                            carbs: carbs[0],
-                            prots: prots[0],
-                            fats: fats[0],
-                        }];
-                        
-                        this.set("dayProgram", dayProgram);
-                        this.set("weekProgram", weekProgram);
+                        this.set("dayProgram", program.day);
+                        this.set("weekProgram", program.week);
                     }
                 });
 
     app.dashboardService = {
         viewModel: new ViewModel(),
-        dashboardShow: function() {
+        dashboardShow: function() { 
+            app.dashboardService.loadDashboardData();
+        },
+        loadDashboardData: function() {
             var viewModel = app.dashboardService.viewModel;
-            //app.profileService.profile = { goal: 1 };
+            var historyRequest = getBiometricsHistory()
+                .done(function(r) { 
+                    viewModel.loadHistory(r);
+                });
+            var programRequest = app.programService
+                .getProgram(app.profileService.profile.goal)
+                .done(function(r) { 
+                    viewModel.loadProgram(r); 
+                });
+        
+            var requests = $.when(historyRequest, programRequest)
+                .fail(function(err) {
+                    viewModel.set('hasErrors', true);
+                    viewModel.set('errorHeader', "Error loading goals: " + err.statusText);
+                    viewModel.set('errorText', err.responseText);
+                });
             
-            if (!app.profileService.profile) {
-                app.views.login.navigateTo();
-            } else {
-                var historyRequest = getBiometricsHistory()
-                    .done(function(r) { 
-                        viewModel.loadHistory(r);
-                    });
-                var programRequest = app.programService
-                    .getProgram(app.profileService.profile.goal)
-                    .done(function(r) { 
-                        viewModel.loadProgram(r); 
-                    });
-            
-                var requests = $.when(historyRequest, programRequest)
-                    .fail(function(err) {
-                        viewModel.set('hasErrors', true);
-                        viewModel.set('errorHeader', "Error loading goals: " + err.statusText);
-                        viewModel.set('errorText', err.responseText);
-                    });
-            
-                viewModel.busyContent = "Loading dashboard...";
-                viewModel.waitForResult(requests);
-            }
+            app.livecycle.track(requests);
         },
         dashboardInit: function() {
             var weightChart = $("#weightChart");

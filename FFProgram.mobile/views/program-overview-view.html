@@ -1,5 +1,5 @@
-<div data-role="view" data-layout="mobile-view" data-title="Overview"
-     data-model="app.profileService.overviewViewModel" data-show="app.profileService.overviewViewShow">
+<div data-role="view" data-layout="mobile-view" data-title="Overview" data-stretch="true"
+     data-model="app.programService.overviewViewModel" data-show="app.programService.overviewViewShow">
     <header data-role="header">
         <div data-role="navbar">
             <a class="nav-button hide-text" data-rel="drawer" href="#my-drawer" data-icon="drawer-button"
@@ -9,8 +9,30 @@
             <span data-role="view-title"></span>
         </div>
     </header>
+    
+<!--	<ul class="horizontalList" data-role="listview" data-bind="source: weekProgram" data-template="scrollview-batch-template">
+    </ul>    -->
 
-    <div>
+    <div data-role="scrollview"
+        data-bind="source: weekProgram"
+        data-template="scrollview-batch-template"
+        data-items-per-page="1"
+        data-content-height="100%"
+        data-enable-pager="false">
+    </div>
+
+    <div data-bind="visible: isWizardPage">
         <a data-role="button" class="align-right" data-bind="click: onGoToDashboard">Go to dashboard</a>
     </div>
 </div>
+
+<script id="scrollview-batch-template" type="text/x-kendo-template">
+    <div class="batch-page" style="width: 100%; height: 100%">
+        <span data-bind="text: title"></span>
+    	<div style="height: 120px"
+             data-role="chart" data-tooltip="visible: false" data-bind="source: data1"
+             data-series-defaults="{ type: 'bar' }"
+             data-series="[{ name: 'carbs', field: 'carbs' }, { name: 'proteins', field: 'prots' }, { name: 'fats', field: 'fats' }]">
+        </div>
+    </div>
+</script>

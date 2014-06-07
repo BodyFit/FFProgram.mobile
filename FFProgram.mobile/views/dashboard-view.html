@@ -14,7 +14,7 @@
              data-series="[{ name: 'carbs', field: 'carbs' }, { name: 'proteins', field: 'prots' }, { name: 'fats', field: 'fats' }]">
         </div>
         <ul class="horizontalList" data-role="listview" data-bind="source: weekProgram" data-template="dayChartTemplate">
-        </ul>        
+        </ul>
     </div>
     
     <div style="background: white">
@@ -32,8 +32,8 @@
 
 <script type="text/x-kendo-template" id="dayChartTemplate">
     <div>
-        <span data-bind="text: title" style="display: block; text-align: center;"></span>
-        <div data-bind="source: data" data-role="sparkline" data-tooltip="visible: false"
+        <span data-bind="text: shortName" style="display: block; text-align: center;"></span>
+        <div data-bind="source: all" data-role="sparkline" data-tooltip="visible: false"
              data-series="[{ type: 'pie', field: '.' }]"
              style="width: 45px; line-height: 41px; display: block;">
         </div>

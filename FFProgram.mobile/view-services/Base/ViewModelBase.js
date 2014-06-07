@@ -21,7 +21,6 @@
 			promise.done(function () {
 				that.clearErrors();
 			})
-
 			.always(function () {
 				app.application.hideLoading();
 			});
