@@ -1,4 +1,4 @@
-<div data-role="view" data-layout="mobile-view" data-title="Overview" data-stretch="true"
+<div data-role="view" data-layout="mobile-view" data-title="Overview"
      data-model="app.programService.overviewViewModel" data-show="app.programService.overviewViewShow">
     <header data-role="header">
         <div data-role="navbar">
@@ -9,30 +9,46 @@
             <span data-role="view-title"></span>
         </div>
     </header>
-    
-<!--	<ul class="horizontalList" data-role="listview" data-bind="source: weekProgram" data-template="scrollview-batch-template">
-    </ul>    -->
 
-    <div data-role="scrollview"
-        data-bind="source: weekProgram"
-        data-template="scrollview-batch-template"
-        data-items-per-page="1"
-        data-content-height="100%"
-        data-enable-pager="false">
-    </div>
+    <ul data-role="listview" data-bind="source: weekProgram" data-template="day-template">
+    </ul>
 
     <div data-bind="visible: isWizardPage">
         <a data-role="button" class="align-right" data-bind="click: onGoToDashboard">Go to dashboard</a>
     </div>
 </div>
 
-<script id="scrollview-batch-template" type="text/x-kendo-template">
-    <div class="batch-page" style="width: 100%; height: 100%">
-        <span data-bind="text: title"></span>
-    	<div style="height: 120px"
-             data-role="chart" data-tooltip="visible: false" data-bind="source: data1"
+<script id="day-template" type="text/x-kendo-template">
+    <div style="width: 100%">
+        <span data-bind="text: longName" style="display: block;"></span>
+        <div data-bind="source: all" data-role="sparkline" data-tooltip="visible: false"
+             data-series="[{ type: 'pie', field: '.' }]"
+             style="line-height: 70px; float: left; width: 25%">
+        </div>
+
+        <div style="height: 70px; float: right; width: 75%"
+             data-role="chart" data-tooltip="visible: false" data-bind="source: data"
              data-series-defaults="{ type: 'bar' }"
              data-series="[{ name: 'carbs', field: 'carbs' }, { name: 'proteins', field: 'prots' }, { name: 'fats', field: 'fats' }]">
         </div>
     </div>
 </script>
+
+<!--    <div data-role="scrollview"
+data-bind="source: weekProgram"
+data-template="scrollview-batch-template"
+data-items-per-page="1"
+data-content-height="100%"
+data-enable-pager="false">
+</div>-->
+
+<!--<script id="scrollview-batch-template" type="text/x-kendo-template">
+<div class="batch-page" style="width: 100%; height: 100%">
+<span data-bind="text: title"></span>
+<div style="height: 120px"
+data-role="chart" data-tooltip="visible: false" data-bind="source: data1"
+data-series-defaults="{ type: 'bar' }"
+data-series="[{ name: 'carbs', field: 'carbs' }, { name: 'proteins', field: 'prots' }, { name: 'fats', field: 'fats' }]">
+</div>
+</div>
+</script>-->

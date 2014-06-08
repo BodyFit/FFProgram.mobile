@@ -4,7 +4,7 @@
     document.addEventListener('deviceready', function () {
         navigator.splashscreen.hide();
 
-        app.application = new kendo.mobile.Application(document.body, { layout: "mobile-view", transition: "slide", skin: 'flat', initial: app.views.dashboard.url });
+        app.application = new kendo.mobile.Application(document.body, { layout: "mobile-view", transition: "slide", skin: 'flat' });
         
         app.livecycle.bootstrap();
         // Load mocked up profile screen.
