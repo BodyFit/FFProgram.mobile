@@ -29,6 +29,8 @@
         <div style="height: 70px; float: right; width: 75%"
              data-role="chart" data-tooltip="visible: false" data-bind="source: data"
              data-series-defaults="{ type: 'bar' }"
+    		 data-value-axis="{ labels: { format: '{0}', rotation: -90 }, line: { visible: false } }"
+    		 data-category-axis="{ labels: { visible: false }, line: { visible: false } }"
              data-series="[{ name: 'carbs', field: 'carbs' }, { name: 'proteins', field: 'prots' }, { name: 'fats', field: 'fats' }]">
         </div>
     </div>

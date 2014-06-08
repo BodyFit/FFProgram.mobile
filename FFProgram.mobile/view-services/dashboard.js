@@ -23,12 +23,19 @@
     
     ViewModel = app.ViewModelBase
         .extend({
+            		'isHistoryLoaded': false,
+            		'isProgramLoaded': false,
                     loadHistory: function(history) {
                         this.set("history", history);
+                        this.set("isHistoryLoaded", true);
                     },
                     loadProgram: function(program) {
                         this.set("dayProgram", program.day);
                         this.set("weekProgram", program.week);
+                        this.set("isProgramLoaded", true);
+                    },
+            		disableEvent: function(e) {
+                        e.preventDefault();
                     }
                 });
 
@@ -60,12 +67,16 @@
             app.livecycle.track(requests);
         },
         dashboardInit: function() {
-            var weightChart = $("#weightChart");
-            var dashboardRoot = $("#dashboardRoot");
+            var $weightChart = $("#weightChart");
+            var $programChart = $("#programChart");
+            var $dashboardRoot = $("#dashboardRoot");
             
             var refreshChartSize = function() {
-                weightChart.width(dashboardRoot.width());
-                weightChart.data("kendoChart").refresh();
+                $weightChart.width($dashboardRoot.width());
+                $weightChart.data("kendoChart").refresh();
+                
+                $programChart.width($dashboardRoot.width());
+                $programChart.data("kendoChart").refresh();
             };
             
             refreshChartSize();

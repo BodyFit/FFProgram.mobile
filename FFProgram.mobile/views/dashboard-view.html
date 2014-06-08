@@ -1,31 +1,31 @@
 <div data-role="view" data-layout="mobile-view" data-title="Dashboard"
      data-model="app.dashboardService.viewModel" data-show="app.dashboardService.dashboardShow"
-     data-init="app.dashboardService.dashboardInit">
+     data-init="app.dashboardService.dashboardInit" id="dashboardRoot">
     <header data-role="header">
         <div data-role="navbar">
             <a data-role="button" data-rel="drawer" href="#my-drawer" data-icon="drawer-button" data-align="left"></a>
             <span data-role="view-title"></span>
         </div>
     </header>
-    <div style="background: white">       
-        <div style="height: 120px"
-             data-role="chart" data-tooltip="visible: false" data-bind="source: dayProgram"
+
+    <div style="background: white">
+        <div style="height: 120px" id="programChart" data-role="chart" data-tooltip="visible: false"
+             data-bind="{ source: dayProgram, visible: isProgramLoaded, events: { legendItemClick: disableEvent, legendItemHover: disableEvent } }"
              data-series-defaults="{ type: 'bar' }"
              data-series="[{ name: 'carbs', field: 'carbs' }, { name: 'proteins', field: 'prots' }, { name: 'fats', field: 'fats' }]">
         </div>
         <ul class="horizontalList" data-role="listview" data-bind="source: weekProgram" data-template="dayChartTemplate">
         </ul>
     </div>
-    
-    <div style="background: white">
+
+    <div style="background: white" data-bind="visible: isHistoryLoaded">
         <div id="weightChart" data-role="chart" style="height: 200px"
+             data-bind="{ source: history }"
+             data-series-defaults="{ type: 'scatterLine', markers: { size: 4 }, style: 'smooth' }"
+             data-x-axis="{ labels: { format: 'dd/MM', rotation: -45 } }"
              data-legend="{ visible: false }"
              data-plot-area="{ margin: 0 }"
-             data-value-axis="{ labels: { format: '{0}' }, line: { visible: false } }"
-             data-category-axis="{ majorGridLines: { visible: true }, labels: { format: 'dd/MM', rotation: -90 }, line: { visible: false } }"
-             data-bind="source: history"
-             data-series-defaults="{ type: 'line', style: 'smooth' }"
-             data-series="[{ name: 'weight', aggregate: 'avg', field: 'value', categoryField: 'date' }]">
+             data-series="[{ xField: 'date', yField: 'value' }]">
         </div>
     </div>
 </div>
@@ -35,7 +35,7 @@
         <span data-bind="text: shortName" style="display: block; text-align: center;"></span>
         <div data-bind="source: all" data-role="sparkline" data-tooltip="visible: false"
              data-series="[{ type: 'pie', field: '.' }]"
-             style="width: 45px; line-height: 41px; display: block;">
+             style="width: 45px; height: 41px; line-height: 41px; display: block;">
         </div>
     </div>
 </script>
